@@ -1,6 +1,13 @@
 py.test plugin to check import ordering using isort
 ===================================================
 
+.. image:: https://badge.fury.io/py/pytest-isort.png
+    :target: http://badge.fury.io/py/pytest-isort
+
+.. image:: https://travis-ci.org/moccu/pytest-isort.svg?branch=master
+    :target: https://travis-ci.org/moccu/pytest-isort
+
+
 Usage
 -----
 
