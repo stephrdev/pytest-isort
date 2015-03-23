@@ -7,5 +7,5 @@ python:
   - "3.4"
 
 script:
-  - pip install -e {toxinidir}
+  - pip install -e .
   - py.test -vs --clearcache
