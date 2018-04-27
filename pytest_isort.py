@@ -11,6 +11,10 @@ __version__ = '0.1.0'
 
 MTIMES_HISTKEY = 'isort/mtimes'
 
+def pytest_configure(config):
+    config.addinivalue_line(
+        'markers',
+        "isort: Test to check import ordering")
 
 def pytest_addoption(parser):
     group = parser.getgroup('general')
