@@ -15,7 +15,7 @@ setup(
     name='pytest-isort',
     description='py.test plugin to check import ordering using isort',
     long_description=read('README.rst'),
-    version='0.1.0',
+    version='0.2.0',
     license='BSD',
     author='Moccu GmbH & Co. KG',
     author_email='info@moccu.com',
