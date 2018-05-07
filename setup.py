@@ -25,8 +25,8 @@ setup(
     test_suite='.',
     install_requires=[
         'pytest-cache>=1.0',
-        'pytest>=2.6.4',
-        'isort>=3.9.6'
+        'pytest>=3.0',
+        'isort>=4.0'
     ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
@@ -35,9 +35,10 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 )

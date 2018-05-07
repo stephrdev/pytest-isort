@@ -2,7 +2,7 @@
 from pytest_isort import FileIgnorer, IsortError
 
 
-pytest_plugins = "pytester",
+pytest_plugins = 'pytester',
 
 
 def test_version():
@@ -100,7 +100,7 @@ def test_correctly_sorted(testdir):
 
     result = testdir.runpytest('--isort', '--verbose')
     result.stdout.fnmatch_lines([
-        '*test_correctly_sorted*isort-check*PASSED',
+        '*test_correctly_sorted*PASSED*',
         '*1 passed*',
     ])
     assert result.ret == 0
@@ -115,10 +115,11 @@ def test_incorrectly_sorted(testdir):
     # Ugly hack to append the missing newline.
     test_file = test_file.write(test_file.read() + '\n')
 
-    result = testdir.runpytest('--isort', '--verbose')
+    result = testdir.runpytest('--isort', '-vv')
     result.stdout.fnmatch_lines([
-        '*test_incorrectly_sorted*isort-check*',
-        'FAILED',
+        '*test_incorrectly_sorted*FAILED*',
+        '*FAILURES*',
+        '*isort-check*',
         '*1 failed*',
     ])
     assert result.ret == 1
