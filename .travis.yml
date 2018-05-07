@@ -9,4 +9,4 @@ python:
 
 script:
   - pip install -e .
-  - py.test -vs --clearcache
+  - py.test -vs --cache-clear
