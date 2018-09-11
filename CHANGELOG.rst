@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2.1 - 2018-09-11
+------------------
+
+* Drop "pytest-cache" dependency, not required anymore - part of py.test itself
+
+
 0.2.0 - 2018-05-07
 ------------------
 
