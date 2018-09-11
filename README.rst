@@ -28,13 +28,13 @@ Example
 Given you have some files with incorrect sorted imports::
 
     # content of file1.py
-     
+
     import os
     import sys
     import random
-    
+
     # content of file2.py
-    
+
     import json
     import sys
     import os
@@ -44,23 +44,23 @@ If you run ``py.test`` and activate the isort plugin you'll se something like th
     $ py.test --isort
     ========================= test session starts ==========================
     platform darwin -- Python 2.7.9 -- py-1.4.26 -- pytest-2.6.4
-    plugins: isort, cache
+    plugins: isort
     collected 2 items
-    
+
     file1.py F
     file2.py F
-    
+
     =============================== FAILURES ===============================
     _____________________________ isort-check ______________________________
     ERROR: file1.py Imports are incorrectly sorted.
-    
+
      import os
     +import random
      import sys
     -import random
     _____________________________ isort-check ______________________________
     ERROR: file2.py Imports are incorrectly sorted.
-    
+
      import json
     +import os
      import sys
@@ -81,15 +81,15 @@ Then re-run the tests::
     $ py.test --isort
     ========================= test session starts ==========================
     platform darwin -- Python 2.7.9 -- py-1.4.26 -- pytest-2.6.4
-    plugins: isort, cache
+    plugins: isort
     collected 1 items
-    
+
     file1.py F
-    
+
     =============================== FAILURES ===============================
     _____________________________ isort-check ______________________________
     ERROR: file1.py Imports are incorrectly sorted.
-    
+
      import os
     +import random
      import sys
@@ -102,11 +102,11 @@ import ordering in ``file1.py`` and re-run the tests::
     $ py.test --isort
     ========================= test session starts ==========================
     platform darwin -- Python 2.7.9 -- py-1.4.26 -- pytest-2.6.4
-    plugins: isort, cache
+    plugins: isort
     collected 1 items
-    
+
     file1.py .
-    
+
     ======================= 1 passed in 0.01 seconds ======================
 
 Everything is properly again. Congratulations!
@@ -117,13 +117,13 @@ files to speed up. You see this by adding ``-rs`` to your ``py.test`` options::
     $ py.test --isort -rs
     ========================= test session starts ==========================
     platform darwin -- Python 2.7.9 -- py-1.4.26 -- pytest-2.6.4
-    plugins: isort, cache
+    plugins: isort
     collected 1 items
-    
+
     file1.py s
     ======================= short test summary info ========================
     SKIP [1] pytest_isort.py:145: file(s) previously passed isort checks
-    
+
     ====================== 1 skipped in 0.01 seconds ======================
 
 
@@ -135,7 +135,7 @@ setting in your ``py.test`` configuration file (e.g. ``pytest.ini``)::
 
     # content of setup.cfg
     [pytest]
-    isort_ignore = 
+    isort_ignore =
         docs/conf.py
         *migrations/*.py
 

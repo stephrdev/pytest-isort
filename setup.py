@@ -24,7 +24,6 @@ setup(
     entry_points={'pytest11': ['isort = pytest_isort']},
     test_suite='.',
     install_requires=[
-        'pytest-cache>=1.0',
         'pytest>=3.0',
         'isort>=4.0'
     ],
