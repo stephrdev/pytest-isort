@@ -139,6 +139,7 @@ class IsortItem(pytest.Item, pytest.File):
 
     def __init__(self, path, parent):
         super(IsortItem, self).__init__(path, parent)
+        self._nodeid += "::ISORT"
         self.add_marker('isort')
 
     def setup(self):
