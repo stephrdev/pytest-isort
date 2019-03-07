@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.3.0 - 2019-03-07
+------------------
+
+* Improve display of test result by appending ::ISORT
+* This release requires pytest 3.5
+
+
 0.2.1 - 2018-09-11
 ------------------
 
