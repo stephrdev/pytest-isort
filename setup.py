@@ -24,7 +24,7 @@ setup(
     entry_points={'pytest11': ['isort = pytest_isort']},
     test_suite='.',
     install_requires=[
-        'pytest>=3.0',
+        'pytest>=3.5',
         'isort>=4.0'
     ],
     classifiers=[
