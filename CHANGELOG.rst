@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3.1 - 2019-03-11
+------------------
+
+* Update packaging, source distribution now includes tests and wheel is universal
+
+
 0.3.0 - 2019-03-07
 ------------------
 
