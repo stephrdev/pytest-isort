@@ -1,5 +1,9 @@
 # -*- coding=utf-8 -*-
-from pytest_isort import FileIgnorer, IsortError
+from unittest.mock import Mock
+
+import pytest
+
+from pytest_isort import FileIgnorer, IsortError, IsortItem
 
 
 pytest_plugins = 'pytester',
@@ -123,3 +127,62 @@ def test_incorrectly_sorted(testdir):
         '*1 failed*',
     ])
     assert result.ret == 1
+
+
+class TestIsortItem:
+    def test_init(self, testdir):
+        class TestConfig:
+            rootdir = testdir.tmpdir
+
+            def getini(self, norecursedirs):
+                return None
+
+        session_mock = Mock()
+        session_mock.configure_mock(
+            _initialpaths=[testdir.tmpdir],
+            config=TestConfig(),
+        )
+
+        class TestParent:
+            fspath = testdir.tmpdir
+            session = session_mock
+            config = TestConfig()
+
+        parent = TestParent()
+        path = testdir.tmpdir
+        kwargs = {}
+
+        test_obj = IsortItem(path, parent, **kwargs)
+
+        assert test_obj.name == path.basename
+        assert test_obj.parent == parent
+        assert test_obj.fspath is path
+
+    def test_init_fspath_in_kwargs(self, testdir):
+        class TestConfig:
+            rootdir = testdir.tmpdir
+
+            def getini(self, norecursedirs):
+                return None
+
+        session_mock = Mock()
+        session_mock.configure_mock(
+            _initialpaths=[testdir.tmpdir],
+            config=TestConfig(),
+        )
+
+        class TestParent:
+            fspath = testdir.tmpdir
+            session = session_mock
+            config = TestConfig()
+
+        parent = TestParent()
+        path = testdir.tmpdir
+        kwargs = {'fspath': path}
+
+        test_obj = IsortItem(None, parent, **kwargs)
+
+        assert test_obj.name == path.basename
+        assert test_obj.parent == parent
+        assert test_obj.fspath is path
+
