@@ -5,7 +5,7 @@ import codecs
 from setuptools import setup
 
 
-VERSION = __import__('pytest_isort').__version__
+VERSION = '0.4.0'
 
 
 def read(*parts):
