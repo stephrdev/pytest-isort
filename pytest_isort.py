@@ -6,7 +6,7 @@ import py
 import pytest
 
 
-__version__ = '0.3.1'
+__version__ = '1.0.0'
 
 
 MTIMES_HISTKEY = 'isort/mtimes'
@@ -40,7 +40,10 @@ def pytest_collect_file(path, parent):
     config = parent.config
     if config.option.isort and path.ext == '.py':
         if not config._isort_ignore(path):
-            return IsortItem(path, parent)
+            if hasattr(IsortItem, 'from_parent'):
+                return IsortItem.from_parent(parent, fspath=path)
+            else:
+                return IsortItem(path, parent)
 
 
 def pytest_sessionfinish(session):
@@ -137,8 +140,10 @@ class IsortItem(pytest.Item, pytest.File):
     py.test Item to run the isort check.
     """
 
-    def __init__(self, path, parent):
-        super(IsortItem, self).__init__(path, parent)
+    def __init__(self, path=None, parent=None, **kwargs):
+        if 'fspath' in kwargs:
+            path = kwargs.pop('fspath')
+        super(IsortItem, self).__init__(name=path, parent=parent, **kwargs)
         self._nodeid += "::ISORT"
         self.add_marker('isort')
 

@@ -5,6 +5,9 @@ import codecs
 from setuptools import setup
 
 
+VERSION = '1.0.0'
+
+
 def read(*parts):
     filename = os.path.join(os.path.dirname(__file__), *parts)
     with codecs.open(filename, encoding='utf-8') as fp:
@@ -15,7 +18,7 @@ setup(
     name='pytest-isort',
     description='py.test plugin to check import ordering using isort',
     long_description=read('README.rst'),
-    version='0.3.1',
+    version=VERSION,
     license='BSD',
     author='Moccu GmbH & Co. KG',
     author_email='info@moccu.com',
@@ -27,6 +30,7 @@ setup(
         'pytest>=3.5',
         'isort>=4.0'
     ],
+    extras_require={'dev': ['mock']},
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
@@ -36,8 +40,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )
