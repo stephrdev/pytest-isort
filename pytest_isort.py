@@ -6,7 +6,7 @@ import py
 import pytest
 
 
-__version__ = '0.4.0'
+__version__ = '1.0.0'
 
 
 MTIMES_HISTKEY = 'isort/mtimes'

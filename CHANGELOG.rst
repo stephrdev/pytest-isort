@@ -1,12 +1,12 @@
 Changelog
 =========
 
-0.4.0 - 2020-04-30
+1.0.0 - 2020-04-30
 ------------------
 
+* BREAKING CHANGE: Drop support for Python 3.4
 * Add support for pytest >= 5.x - fixes "from_parent" warning
 * Add support for Python 3.7 and Python 3.8
-* Drop support for Python 3.4
 
 
 0.3.1 - 2019-03-11
