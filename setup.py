@@ -30,6 +30,7 @@ setup(
         'pytest>=3.5',
         'isort>=4.0'
     ],
+    extras_require={'dev': ['mock']},
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
