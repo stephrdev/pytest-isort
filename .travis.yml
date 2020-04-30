@@ -11,5 +11,5 @@ python:
   - "3.8"
 
 script:
-  - pip install -e .
+  - pip install -e .[dev]
   - py.test -vs --cache-clear
