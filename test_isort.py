@@ -1,5 +1,8 @@
 # -*- coding=utf-8 -*-
-from unittest.mock import Mock
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from mock import Mock
 
 import pytest
 
@@ -156,7 +159,7 @@ class TestIsortItem:
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
-        assert test_obj.fspath is path
+        assert test_obj.fspath == path
 
     def test_init_fspath_in_kwargs(self, testdir):
         class TestConfig:
@@ -184,5 +187,5 @@ class TestIsortItem:
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
-        assert test_obj.fspath is path
+        assert test_obj.fspath == path
 
