@@ -54,13 +54,18 @@ def pytest_sessionfinish(session):
         config.cache.set(MTIMES_HISTKEY, config._isort_mtimes)
 
 
-def isort_check_file(path):
-    """
-    Given a file path, this function executes the actual isort check.
-    """
+try:
+    # isort>=5
+    isort_check_file = isort.check_file
+except AttributeError:
+    # isort<5
+    def isort_check_file(filename, *args, **kwargs):
+        """
+        Given a file path, this function executes the actual isort check.
+        """
 
-    sorter = isort.SortImports(str(path), check=True, show_diff=True)
-    return sorter.incorrectly_sorted
+        sorter = isort.SortImports(str(filename), *args, check=True, **kwargs)
+        return not sorter.incorrectly_sorted
 
 
 class FileIgnorer:
@@ -158,10 +163,10 @@ class IsortItem(pytest.Item, pytest.File):
 
     def runtest(self):
         # Execute actual isort check.
-        found_errors, stdout, stderr = py.io.StdCaptureFD.call(
-            isort_check_file, self.fspath)
+        ok, stdout, stderr = py.io.StdCaptureFD.call(
+            isort_check_file, self.fspath, show_diff=True)
 
-        if found_errors:
+        if not ok:
             # Strip diff header, this is not needed when displaying errors.
             raise IsortError(stdout)
 
