@@ -155,7 +155,7 @@ class TestIsortItem:
         path = testdir.tmpdir
         kwargs = {}
 
-        test_obj = IsortItem(path, parent, **kwargs)
+        test_obj = IsortItem.from_parent(parent, **kwargs, fspath=path)
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
@@ -183,7 +183,7 @@ class TestIsortItem:
         path = testdir.tmpdir
         kwargs = {'fspath': path}
 
-        test_obj = IsortItem(None, parent, **kwargs)
+        test_obj = IsortItem.from_parent(parent, **kwargs)
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
