@@ -8,6 +8,12 @@ py.test plugin to check import ordering using isort
     :target: https://travis-ci.org/moccu/pytest-isort
 
 
+Support
+-------
+
+Python 3.5, 3.6, 3.7 and 3.8. pytest 4, 5 and 6.
+
+
 Usage
 -----
 

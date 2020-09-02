@@ -12,6 +12,10 @@ from pytest_isort import FileIgnorer, IsortError, IsortItem
 pytest_plugins = 'pytester',
 
 
+def get_pytest_version():
+    return tuple(map(int, pytest.__version__.split('.')))
+
+
 def test_version():
     import pytest_isort
     assert pytest_isort.__version__
@@ -153,39 +157,12 @@ class TestIsortItem:
 
         parent = TestParent()
         path = testdir.tmpdir
-        kwargs = {}
 
-        test_obj = IsortItem(path, parent, **kwargs)
-
-        assert test_obj.name == path.basename
-        assert test_obj.parent == parent
-        assert test_obj.fspath == path
-
-    def test_init_fspath_in_kwargs(self, testdir):
-        class TestConfig:
-            rootdir = testdir.tmpdir
-
-            def getini(self, norecursedirs):
-                return None
-
-        session_mock = Mock()
-        session_mock.configure_mock(
-            _initialpaths=[testdir.tmpdir],
-            config=TestConfig(),
-        )
-
-        class TestParent:
-            fspath = testdir.tmpdir
-            session = session_mock
-            config = TestConfig()
-
-        parent = TestParent()
-        path = testdir.tmpdir
-        kwargs = {'fspath': path}
-
-        test_obj = IsortItem(None, parent, **kwargs)
+        if get_pytest_version()[0] < 5:
+            test_obj = IsortItem(path, parent)
+        else:
+            test_obj = IsortItem.from_parent(parent, fspath=path)
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
         assert test_obj.fspath == path
-
