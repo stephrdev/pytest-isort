@@ -183,3 +183,6 @@ class IsortItem(pytest.Item, pytest.File):
 
     def reportinfo(self):
         return (self.fspath, -1, 'isort-check')
+
+    def collect(self):
+        return iter((self,))
