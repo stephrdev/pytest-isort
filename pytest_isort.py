@@ -5,11 +5,19 @@ import isort
 import py
 import pytest
 
-
 __version__ = '1.3.0'
 
 
 MTIMES_HISTKEY = 'isort/mtimes'
+
+
+try:
+    from isort.exceptions import FileSkipSetting
+except ImportError:
+    # isort <5.0.0 soes not raise exceptions for skipped files, but our custom
+    # 'check_file' implementation will, so we need to define it ourselves.
+    class FileSkipSetting(Exception):
+        pass
 
 
 def pytest_configure(config):
@@ -63,8 +71,9 @@ except AttributeError:
         """
         Given a file path, this function executes the actual isort check.
         """
-
         sorter = isort.SortImports(str(filename), *args, check=True, **kwargs)
+        if sorter.skipped:
+            raise FileSkipSetting("isort v4 skipped this file")
         return not sorter.incorrectly_sorted
 
 
@@ -163,8 +172,16 @@ class IsortItem(pytest.Item, pytest.File):
 
     def runtest(self):
         # Execute actual isort check.
-        ok, stdout, stderr = py.io.StdCaptureFD.call(
-            isort_check_file, self.fspath, show_diff=True)
+        try:
+            ok, stdout, stderr = py.io.StdCaptureFD.call(
+                isort_check_file,
+                self.fspath,
+                show_diff=True,
+                disregard_skip=False,
+            )
+        except FileSkipSetting:
+            # File was skipped due to isort native config
+            pytest.skip("file(s) ignored in isort configuration")
 
         if not ok:
             # Strip diff header, this is not needed when displaying errors.
