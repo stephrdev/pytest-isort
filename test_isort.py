@@ -12,6 +12,10 @@ from pytest_isort import FileIgnorer, IsortError, IsortItem
 pytest_plugins = 'pytester',
 
 
+def get_pytest_version():
+    return tuple(map(int, pytest.__version__.split('.')))
+
+
 def test_version():
     import pytest_isort
     assert pytest_isort.__version__
@@ -96,6 +100,22 @@ def test_file_ignored(testdir):
     ])
     assert result.ret == 0
 
+
+def test_file_ignored_in_isort_config(testdir):
+    testdir.tmpdir.ensure("file1.py")
+    testdir.tmpdir.ensure("file2.py")
+
+    isort_cfg = testdir.tmpdir / ".isort.cfg"
+    isort_cfg.write_text("[settings]\nskip = file1.py", encoding="utf-8")
+
+    result = testdir.runpytest('--isort')
+    result.stdout.fnmatch_lines([
+        'file1.py s*',
+        'file2.py .*',
+        '*1 passed, 1 skipped*'
+    ])
+
+
 def test_correctly_sorted(testdir):
     test_file = testdir.makepyfile("""
         import os
@@ -153,39 +173,12 @@ class TestIsortItem:
 
         parent = TestParent()
         path = testdir.tmpdir
-        kwargs = {}
 
-        test_obj = IsortItem(path, parent, **kwargs)
-
-        assert test_obj.name == path.basename
-        assert test_obj.parent == parent
-        assert test_obj.fspath == path
-
-    def test_init_fspath_in_kwargs(self, testdir):
-        class TestConfig:
-            rootdir = testdir.tmpdir
-
-            def getini(self, norecursedirs):
-                return None
-
-        session_mock = Mock()
-        session_mock.configure_mock(
-            _initialpaths=[testdir.tmpdir],
-            config=TestConfig(),
-        )
-
-        class TestParent:
-            fspath = testdir.tmpdir
-            session = session_mock
-            config = TestConfig()
-
-        parent = TestParent()
-        path = testdir.tmpdir
-        kwargs = {'fspath': path}
-
-        test_obj = IsortItem(None, parent, **kwargs)
+        if get_pytest_version()[0] < 5:
+            test_obj = IsortItem(path, parent)
+        else:
+            test_obj = IsortItem.from_parent(parent, fspath=path)
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
         assert test_obj.fspath == path
-

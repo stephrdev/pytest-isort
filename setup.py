@@ -1,11 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import os
 import codecs
 from setuptools import setup
 
 
-VERSION = '1.0.0'
+VERSION = '2.0.0'
 
 
 def read(*parts):
@@ -26,19 +24,15 @@ setup(
     py_modules=['pytest_isort'],
     entry_points={'pytest11': ['isort = pytest_isort']},
     test_suite='.',
-    install_requires=[
-        'pytest>=3.5',
-        'isort>=4.0'
-    ],
-    extras_require={'dev': ['mock']},
+    install_requires=['isort>=4.0'],
+    extras_require={'tests': ['mock']},
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',

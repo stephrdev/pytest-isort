@@ -1,6 +1,30 @@
 Changelog
 =========
 
+2.0.0 - 2021-04-27
+------------------
+
+* BREAKING CHANGE: Files that are ignored in isort's own configuration will now be skipped
+
+
+1.3.0 - 2021-01-13
+------------------
+
+* Fix issue with pytest >= 6.1
+
+
+1.2.0 - 2020-09-02
+------------------
+
+* Add support for pytest >= 6
+
+
+1.1.0 - 2020-07-06
+------------------
+
+* Add support for isort >= 5
+
+
 1.0.0 - 2020-04-30
 ------------------
 

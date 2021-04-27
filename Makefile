@@ -3,10 +3,10 @@
 VERSION = $(shell python -c "print(__import__('pytest_isort').__version__)")
 
 clean:
-	rm -fr docs/_build build/ dist/
+	rm -fr docs/_build build/ dist/ __pycache__
 
 tests:
-	py.test
+	tox
 
 release-tag:
 	@echo About to release ${VERSION}
