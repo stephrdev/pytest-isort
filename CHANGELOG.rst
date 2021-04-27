@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.0 - 2021-04-27
+------------------
+
+* BREAKING CHANGE: Files that are ignored in isort's own configuration will now be skipped
+
+
 1.3.0 - 2021-01-13
 ------------------
 

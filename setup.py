@@ -3,7 +3,7 @@ import codecs
 from setuptools import setup
 
 
-VERSION = '1.3.0'
+VERSION = '2.0.0'
 
 
 def read(*parts):
