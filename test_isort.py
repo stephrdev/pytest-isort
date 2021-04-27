@@ -100,6 +100,22 @@ def test_file_ignored(testdir):
     ])
     assert result.ret == 0
 
+
+def test_file_ignored_in_isort_config(testdir):
+    testdir.tmpdir.ensure("file1.py")
+    testdir.tmpdir.ensure("file2.py")
+
+    isort_cfg = testdir.tmpdir / ".isort.cfg"
+    isort_cfg.write_text("[settings]\nskip = file1.py", encoding="utf-8")
+
+    result = testdir.runpytest('--isort')
+    result.stdout.fnmatch_lines([
+        'file1.py s*',
+        'file2.py .*',
+        '*1 passed, 1 skipped*'
+    ])
+
+
 def test_correctly_sorted(testdir):
     test_file = testdir.makepyfile("""
         import os
