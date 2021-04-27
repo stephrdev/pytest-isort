@@ -7,9 +7,6 @@ py.test plugin to check import ordering using isort
 .. image:: https://github.com/moccu/pytest-isort/workflows/Testing/badge.svg?branch=master
     :target: https://github.com/moccu/pytest-isort/actions?query=workflow%3ATesting
 
-.. image:: https://codecov.io/gh/moccu/pytest-isort/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/moccu/pytest-isort
-
 
 Support
 -------
