@@ -1,15 +1,11 @@
-# -*- coding=utf-8 -*-
-try:
-    from unittest.mock import Mock
-except ImportError:
-    from mock import Mock
+from unittest.mock import Mock
 
 import pytest
 
 from pytest_isort import FileIgnorer, IsortError, IsortItem
 
 
-pytest_plugins = 'pytester',
+pytest_plugins = ('pytester',)
 
 
 def get_pytest_version():
@@ -18,21 +14,24 @@ def get_pytest_version():
 
 def test_version():
     import pytest_isort
+
     assert pytest_isort.__version__
 
 
 def test_file_ignorer(tmpdir):
-    ignorer = FileIgnorer([
-        'somefile.py',
-        '# Commented line',
-        'folder1/file1.py',
-        'folder2/*  # With comment',
-    ])
+    ignorer = FileIgnorer(
+        [
+            'somefile.py',
+            '# Commented line',
+            'folder1/file1.py',
+            'folder2/*  # With comment',
+        ]
+    )
 
     assert ignorer.ignores == [
         'somefile.py',
         'folder1/file1.py',
-        'folder2/*'
+        'folder2/*',
     ]
 
     assert ignorer(tmpdir.join('otherfile.py')) is False
@@ -74,11 +73,13 @@ def test_file_no_ignored(testdir):
     testdir.tmpdir.ensure('file2.py')
 
     result = testdir.runpytest('--isort')
-    result.stdout.fnmatch_lines([
-        'file1.py*',
-        'file2.py*',
-        '*2 passed*',
-    ])
+    result.stdout.fnmatch_lines(
+        [
+            'file1.py*',
+            'file2.py*',
+            '*2 passed*',
+        ]
+    )
     assert result.ret == 0
 
 
@@ -86,18 +87,22 @@ def test_file_ignored(testdir):
     testdir.tmpdir.ensure('file1.py')
     testdir.tmpdir.ensure('file2.py')
 
-    testdir.makeini("""
+    testdir.makeini(
+        """
         [pytest]
         isort_ignore =
             file2.py
             file3.py
-    """)
+    """
+    )
 
     result = testdir.runpytest('--isort')
-    result.stdout.fnmatch_lines([
-        'file1.py*',
-        '*1 passed*',
-    ])
+    result.stdout.fnmatch_lines(
+        [
+            'file1.py*',
+            '*1 passed*',
+        ]
+    )
     assert result.ret == 0
 
 
@@ -109,46 +114,56 @@ def test_file_ignored_in_isort_config(testdir):
     isort_cfg.write_text("[settings]\nskip = file1.py", encoding="utf-8")
 
     result = testdir.runpytest('--isort')
-    result.stdout.fnmatch_lines([
-        'file1.py s*',
-        'file2.py .*',
-        '*1 passed, 1 skipped*'
-    ])
+    result.stdout.fnmatch_lines(
+        [
+            'file1.py s*',
+            'file2.py .*',
+            '*1 passed, 1 skipped*',
+        ]
+    )
 
 
 def test_correctly_sorted(testdir):
-    test_file = testdir.makepyfile("""
+    test_file = testdir.makepyfile(
+        """
         import os
         import sys
-    """)
+    """
+    )
 
     # Ugly hack to append the missing newline.
     test_file = test_file.write(test_file.read() + '\n')
 
     result = testdir.runpytest('--isort', '--verbose')
-    result.stdout.fnmatch_lines([
-        '*test_correctly_sorted*PASSED*',
-        '*1 passed*',
-    ])
+    result.stdout.fnmatch_lines(
+        [
+            '*test_correctly_sorted*PASSED*',
+            '*1 passed*',
+        ]
+    )
     assert result.ret == 0
 
 
 def test_incorrectly_sorted(testdir):
-    test_file = testdir.makepyfile("""
+    test_file = testdir.makepyfile(
+        """
         import sys
         import os
-    """)
+    """
+    )
 
     # Ugly hack to append the missing newline.
     test_file = test_file.write(test_file.read() + '\n')
 
     result = testdir.runpytest('--isort', '-vv')
-    result.stdout.fnmatch_lines([
-        '*test_incorrectly_sorted*FAILED*',
-        '*FAILURES*',
-        '*isort-check*',
-        '*1 failed*',
-    ])
+    result.stdout.fnmatch_lines(
+        [
+            '*test_incorrectly_sorted*FAILED*',
+            '*FAILURES*',
+            '*isort-check*',
+            '*1 failed*',
+        ]
+    )
     assert result.ret == 1
 
 

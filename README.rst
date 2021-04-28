@@ -1,17 +1,19 @@
 py.test plugin to check import ordering using isort
 ===================================================
 
-.. image:: https://badge.fury.io/py/pytest-isort.svg
-    :target: http://badge.fury.io/py/pytest-isort
+.. image:: https://img.shields.io/pypi/v/pytest-isort.svg
+   :target: https://pypi.python.org/pypi/pytest-isort
+   :alt: Latest Version
 
-.. image:: https://github.com/moccu/pytest-isort/workflows/Testing/badge.svg?branch=master
-    :target: https://github.com/moccu/pytest-isort/actions?query=workflow%3ATesting
+.. image:: https://github.com/stephrdev/pytest-isort/workflows/Test/badge.svg?branch=master
+   :target: https://github.com/stephrdev/pytest-isort/actions?workflow=Test
+   :alt: CI Status
 
 
 Support
 -------
 
-Python 3.5, 3.6, 3.7 and 3.8. pytest 4, 5 and 6.
+Python 3.6, 3.7, 3.8 and 3.9. pytest 4, 5 and 6.
 
 
 Usage
@@ -147,6 +149,9 @@ setting in your ``py.test`` configuration file (e.g. ``pytest.ini``)::
 
 This will ignore the ``conf.py`` python file inside the ``docs`` folder and
 also ignore any python file in ``migrations`` folders.
+
+In addition, excluded files in isort's configuration will be ignored too.
+
 
 Notes
 -----

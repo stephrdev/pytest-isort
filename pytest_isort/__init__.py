@@ -5,7 +5,17 @@ import isort
 import py
 import pytest
 
-__version__ = '2.0.0'
+
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:
+    # This is required for Python versions < 3.8
+    import importlib_metadata
+
+try:
+    __version__ = importlib_metadata.version('pytest-isort')
+except Exception:
+    __version__ = 'HEAD'
 
 
 MTIMES_HISTKEY = 'isort/mtimes'
@@ -21,20 +31,25 @@ except ImportError:
 
 
 def pytest_configure(config):
-    config.addinivalue_line(
-        'markers',
-        'isort: Test to check import ordering')
+    config.addinivalue_line('markers', 'isort: Test to check import ordering')
 
 
 def pytest_addoption(parser):
     group = parser.getgroup('general')
-    group.addoption('--isort', action='store_true', help=(
-        'perform import ordering checks on .py files'))
+    group.addoption(
+        '--isort',
+        action='store_true',
+        help='perform import ordering checks on .py files',
+    )
 
-    parser.addini('isort_ignore', type='linelist', help=(
-        'each line specifies a glob filename pattern which will be ignored. '
-        'Example: */__init__.py'
-    ))
+    parser.addini(
+        'isort_ignore',
+        type='linelist',
+        help=(
+            'each line specifies a glob filename pattern which will be ignored. '
+            'Example: */__init__.py'
+        ),
+    )
 
 
 def pytest_sessionstart(session):

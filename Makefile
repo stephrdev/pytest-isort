@@ -1,14 +1,21 @@
-.PHONY: clean tests release-tag
-
-VERSION = $(shell python -c "print(__import__('pytest_isort').__version__)")
+.PHONY: clean correct pytests tests release
+.ONESHELL: release
 
 clean:
-	rm -fr docs/_build build/ dist/ __pycache__
+	rm -fr build/ dist/ __pycache__
+
+correct:
+	poetry run isort pytest_isort tests
+	poetry run black -q pytest_isort tests
+
+pytests:
+	@PYTHONPATH=$(CURDIR):${PYTHONPATH} poetry run pytest
 
 tests:
-	tox
+	@PYTHONPATH=$(CURDIR):${PYTHONPATH} poetry run pytest --isort --flake8 --black
 
-release-tag:
-	@echo About to release ${VERSION}
+release:
+	@VERSION=`poetry version -s`
+	@echo About to release $${VERSION}
 	@echo [ENTER] to continue; read
-	git tag -a "v${VERSION}" -m "Version v${VERSION}" && git push --follow-tags
+	git tag -a "$${VERSION}" -m "Version $${VERSION}" && git push --follow-tags

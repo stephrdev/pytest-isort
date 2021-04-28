@@ -1,4 +1,0 @@
-include README.rst
-include CHANGELOG.rst
-include LICENSE.rst
-include test_isort.py
