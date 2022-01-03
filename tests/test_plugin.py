@@ -1,15 +1,9 @@
 from unittest.mock import Mock
 
-import pytest
-
 from pytest_isort import FileIgnorer, IsortError, IsortItem
 
 
 pytest_plugins = ('pytester',)
-
-
-def get_pytest_version():
-    return tuple(map(int, pytest.__version__.split('.')))
 
 
 def test_version():
@@ -189,10 +183,10 @@ class TestIsortItem:
         parent = TestParent()
         path = testdir.tmpdir
 
-        if get_pytest_version()[0] < 5:
-            test_obj = IsortItem(path, parent)
-        else:
+        if hasattr(IsortItem, "from_parent"):
             test_obj = IsortItem.from_parent(parent, fspath=path)
+        else:
+            test_obj = IsortItem(path, parent)
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
