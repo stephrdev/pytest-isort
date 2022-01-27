@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from pathlib import Path
 
 import isort
 import py
@@ -17,6 +18,7 @@ try:
 except Exception:
     __version__ = 'HEAD'
 
+PYTEST_VER = tuple(int(x) for x in pytest.__version__.split(".")[:2])
 
 MTIMES_HISTKEY = 'isort/mtimes'
 
@@ -59,14 +61,24 @@ def pytest_sessionstart(session):
         config._isort_ignore = FileIgnorer(config.getini('isort_ignore'))
 
 
+def _make_path_kwargs(p):
+    """
+    Make keyword arguments passing either path or fspath, depending on pytest version.
+
+    In pytest 7.0, the `fspath` argument to Nodes has been deprecated, so we pass `path`
+    instead.
+    """
+    return dict(path=Path(p)) if PYTEST_VER >= (7, 0) else dict(fspath=p)
+
+
 def pytest_collect_file(path, parent):
     config = parent.config
     if config.option.isort and path.ext == '.py':
         if not config._isort_ignore(path):
-            if hasattr(IsortItem, 'from_parent'):
-                return IsortItem.from_parent(parent, fspath=path)
+            if hasattr(IsortFile, 'from_parent'):
+                return IsortFile.from_parent(parent, **_make_path_kwargs(path))
             else:
-                return IsortItem(path, parent)
+                return IsortFile(path, parent)
 
 
 def pytest_sessionfinish(session):
@@ -164,16 +176,26 @@ class IsortError(Exception):
         return '\n'.join(valid_lines)
 
 
-class IsortItem(pytest.Item, pytest.File):
+class IsortFile(pytest.File):
     """
-    py.test Item to run the isort check.
+    Collector to collect Python files as an IsortItems.
     """
 
-    def __init__(self, path=None, parent=None, **kwargs):
-        if 'fspath' in kwargs:
-            path = kwargs.pop('fspath')
-        super(IsortItem, self).__init__(name=path, parent=parent, **kwargs)
-        self._nodeid += "::ISORT"
+    def collect(self):
+        if hasattr(IsortItem, "from_parent"):
+            return [IsortItem.from_parent(name=self.name, parent=self)]
+        else:
+            return [IsortItem(name=self.name, parent=self)]
+
+
+class IsortItem(pytest.Item):
+    """
+    pytest Item to run the isort check.
+    """
+
+    def __init__(self, *args, parent, **kwargs):
+        nodeid = parent.nodeid + "::ISORT"
+        super().__init__(*args, nodeid=nodeid, parent=parent, **kwargs)
         self.add_marker('isort')
 
     def setup(self):
@@ -215,6 +237,3 @@ class IsortItem(pytest.Item, pytest.File):
 
     def reportinfo(self):
         return (self.fspath, -1, 'isort-check')
-
-    def collect(self):
-        return iter((self,))

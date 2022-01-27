@@ -1,3 +1,5 @@
+import os.path
+from pathlib import Path
 from unittest.mock import Mock
 
 from pytest_isort import FileIgnorer, IsortError, IsortItem
@@ -24,14 +26,14 @@ def test_file_ignorer(tmpdir):
 
     assert ignorer.ignores == [
         'somefile.py',
-        'folder1/file1.py',
-        'folder2/*',
+        os.path.join('folder1', 'file1.py'),
+        os.path.join('folder2', '*'),
     ]
 
     assert ignorer(tmpdir.join('otherfile.py')) is False
-    assert ignorer(tmpdir.join('folder1/file1.py')) == 'folder1/file1.py'
+    assert ignorer(tmpdir.join('folder1/file1.py')) == os.path.join('folder1', 'file1.py')
     assert ignorer(tmpdir.join('folder1/file2.py')) is False
-    assert ignorer(tmpdir.join('folder2/file1.py')) == 'folder2/*'
+    assert ignorer(tmpdir.join('folder2/file1.py')) == os.path.join('folder2', '*')
 
 
 class TestIsortError:
@@ -176,18 +178,23 @@ class TestIsortItem:
         )
 
         class TestParent:
+            # `fspath` for pytest<7.0.
             fspath = testdir.tmpdir
+            # `path` for pytest >=7.0.
+            path = Path(testdir.tmpdir)
             session = session_mock
             config = TestConfig()
+            nodeid = "test_init0.py"
 
         parent = TestParent()
         path = testdir.tmpdir
 
         if hasattr(IsortItem, "from_parent"):
-            test_obj = IsortItem.from_parent(parent, fspath=path)
+            test_obj = IsortItem.from_parent(parent=parent, name="test_init0")
         else:
-            test_obj = IsortItem(path, parent)
+            test_obj = IsortItem(parent=parent, name="test_init0")
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
         assert test_obj.fspath == path
+        assert test_obj.nodeid == "test_init0.py::ISORT"
