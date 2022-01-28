@@ -189,10 +189,7 @@ class TestIsortItem:
         parent = TestParent()
         path = testdir.tmpdir
 
-        if hasattr(IsortItem, "from_parent"):
-            test_obj = IsortItem.from_parent(parent=parent, name="test_init0")
-        else:
-            test_obj = IsortItem(parent=parent, name="test_init0")
+        test_obj = IsortItem.from_parent(parent=parent, name="test_init0")
 
         assert test_obj.name == path.basename
         assert test_obj.parent == parent
