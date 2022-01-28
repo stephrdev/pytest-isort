@@ -75,10 +75,7 @@ def pytest_collect_file(path, parent):
     config = parent.config
     if config.option.isort and path.ext == '.py':
         if not config._isort_ignore(path):
-            if hasattr(IsortFile, 'from_parent'):
-                return IsortFile.from_parent(parent, **_make_path_kwargs(path))
-            else:
-                return IsortFile(path, parent)
+            return IsortFile.from_parent(parent, **_make_path_kwargs(path))
 
 
 def pytest_sessionfinish(session):
@@ -182,10 +179,7 @@ class IsortFile(pytest.File):
     """
 
     def collect(self):
-        if hasattr(IsortItem, "from_parent"):
-            return [IsortItem.from_parent(name=self.name, parent=self)]
-        else:
-            return [IsortItem(name=self.name, parent=self)]
+        return [IsortItem.from_parent(name=self.name, parent=self)]
 
 
 class IsortItem(pytest.Item):
