@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.0.0 - 2022-02-08
+------------------
+
+* Drop support for isort < 5
+* Add suport for pytest 7
+
+
 2.0.0 - 2021-04-27
 ------------------
 

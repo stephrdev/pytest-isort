@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytest-isort"
-version = "2.0.0"
+version = "3.0.0"
 description = "py.test plugin to check import ordering using isort"
 authors = [
 	"Stephan Jaekel <steph@rdev.info>",
