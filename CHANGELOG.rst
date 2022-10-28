@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.1.0 - 2022-10-28
+------------------
+
+* Drop official support for Python 3.6.
+* Drop usage of "py" dependency and use pytest capture instead
+
+
 3.0.0 - 2022-02-08
 ------------------
 

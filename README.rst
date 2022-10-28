@@ -13,7 +13,7 @@ py.test plugin to check import ordering using isort
 Support
 -------
 
-Python 3.6, 3.7, 3.8, 3.9 and 3.10. pytest>=5.
+Python 3.7, 3.8, 3.9 and 3.10. pytest>=5.
 
 
 Usage
