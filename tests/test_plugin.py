@@ -145,6 +145,9 @@ def test_incorrectly_sorted(testdir):
         """
         import sys
         import os
+
+        def test_dummy():
+            assert True is False
     """
     )
 
@@ -154,10 +157,11 @@ def test_incorrectly_sorted(testdir):
     result = testdir.runpytest('--isort', '-vv')
     result.stdout.fnmatch_lines(
         [
+            '*test_incorrectly_sorted*ISORT*FAILED*',
             '*test_incorrectly_sorted*FAILED*',
             '*FAILURES*',
             '*isort-check*',
-            '*1 failed*',
+            '*2 failed*',
         ]
     )
     assert result.ret == 1

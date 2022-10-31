@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 
 import isort
-import py
 import pytest
+from _pytest import capture
 
 
 try:
@@ -203,16 +203,29 @@ class IsortItem(pytest.Item):
 
     def runtest(self):
         # Execute actual isort check.
+        if PYTEST_VER >= (6, 0):
+            cap_kwargs = {
+                'in_': capture.FDCapture(0),
+                'out': capture.FDCapture(1),
+                'err': capture.FDCapture(2),
+            }
+        else:
+            cap_kwargs = {
+                'in_': True,
+                'out': True,
+                'err': True,
+                'Capture': capture.FDCapture,
+            }
+        cap = capture.MultiCapture(**cap_kwargs)
+        cap.start_capturing()
         try:
-            ok, stdout, stderr = py.io.StdCaptureFD.call(
-                isort_check_file,
-                self.fspath,
-                show_diff=True,
-                disregard_skip=False,
-            )
+            ok = isort_check_file(self.fspath, show_diff=True, disregard_skip=False)
         except FileSkipSetting:
             # File was skipped due to isort native config
             pytest.skip("file(s) ignored in isort configuration")
+        finally:
+            stdout = str(cap.readouterr().out)
+            cap.stop_capturing()
 
         if not ok:
             # Strip diff header, this is not needed when displaying errors.
