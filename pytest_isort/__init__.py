@@ -87,6 +87,7 @@ def pytest_sessionfinish(session):
         cache.update(config._isort_mtimes)
         config.cache.set(HISTKEY, cache)
 
+
 try:
     # isort>=5
     isort_check_file = isort.check_file
