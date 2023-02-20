@@ -83,9 +83,9 @@ def pytest_sessionfinish(session):
 
     # isort might not be enabled, lets check if we have a mtimes dict.
     if hasattr(config, '_isort_mtimes'):
-        cache = config.cache.get(HISTKEY, {})
+        cache = config.cache.get(MTIMES_HISTKEY, {})
         cache.update(config._isort_mtimes)
-        config.cache.set(HISTKEY, cache)
+        config.cache.set(MTIMES_HISTKEY, cache)
 
 
 try:
