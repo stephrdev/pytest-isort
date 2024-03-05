@@ -1,6 +1,14 @@
 Changelog
 =========
 
+4.0.0 - 2024-03-05
+------------------
+
+* Drop support for Python 3.7
+* Add support for Python 3.10 and 3.11
+* Add support for pytest 8
+
+
 3.1.0 - 2022-10-28
 ------------------
 
