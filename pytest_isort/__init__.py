@@ -71,11 +71,21 @@ def _make_path_kwargs(p):
     return dict(path=Path(p)) if PYTEST_VER >= (7, 0) else dict(fspath=p)
 
 
-def pytest_collect_file(path, parent):
-    config = parent.config
-    if config.option.isort and path.ext == '.py':
-        if not config._isort_ignore(path):
-            return IsortFile.from_parent(parent, **_make_path_kwargs(path))
+if PYTEST_VER >= (7, 0):
+
+    def pytest_collect_file(file_path, parent):
+        config = parent.config
+        if config.option.isort and file_path.suffix == '.py':
+            if not config._isort_ignore(file_path):
+                return IsortFile.from_parent(parent, **_make_path_kwargs(file_path))
+
+else:
+
+    def pytest_collect_file(path, parent):
+        config = parent.config
+        if config.option.isort and path.ext == '.py':
+            if not config._isort_ignore(path):
+                return IsortFile.from_parent(parent, **_make_path_kwargs(path))
 
 
 def pytest_sessionfinish(session):
@@ -139,8 +149,12 @@ class FileIgnorer:
         """
 
         for glob in self.ignores:
-            if path.fnmatch(glob):
-                return glob
+            if isinstance(path, Path):
+                if path.match(glob):
+                    return glob
+            else:
+                if path.fnmatch(glob):
+                    return glob
 
         return False
 
